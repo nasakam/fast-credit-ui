@@ -13,7 +13,7 @@
         <script src="js/jQuery.js" type="text/javascript"></script>
         <script src="js/script.js" type="text/javascript"></script>
     </head>
-    <body>
+    <body class="hide">
         <div class="field_1">
             <div class="jumbotron" style="background-color: #05264c; color: #fff;">
                 <h2>Admin: User Mgt App</h2>
@@ -142,7 +142,12 @@
                                         </tbody>
                                     </table>
 
-                                    <button id="delete1" class="btn btn-danger" style="width: 100%;">Delete</button>
+                                    <span class="">
+                                        <button id="update1" class="btn btn-primary inline" style="width: 45%;">Update</button>
+                                    </span>
+                                    <span class="x_p">
+                                        <button id="delete1" class="btn btn-danger inline" style="width: 45%;">Delete</button>
+                                    </span>
                                 </div>
 
                                 <div>
@@ -210,15 +215,15 @@
                     window.location.href = "/user-interface/index.html";
                     alert("Unauthorized");
                 } else {
-                    var verifyToken = "http://localhost:9797/fast-credit/admin/v1/token";
+                    var getRole = "http://localhost:9797/fast-credit/api/v1/role";
                     var headerData = {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Authorization': 'Bearer ' + token,
                         'ChannelCode': "WEB_01"
                     };
 
                     $.ajax({
                         type: 'GET',
-                        url: verifyToken,
+                        url: getRole,
                         contentType: 'application/json',
                         headers: headerData,
                         processData: false,
@@ -227,8 +232,11 @@
                             console.log(data);
 
                             if (data) {
-                                if (data.code !== "00") {
-                                    window.location.href = "/user-interface/index.html";
+
+                                if (data.data === "admin") {
+                                    $("body").removeClass("hide").addClass("show");
+                                } else {
+                                    window.location.href = "/user-interface/user.html";
                                     alert("Unauthorized");
                                 }
                             } else {

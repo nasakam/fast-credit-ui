@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>User Management</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="js/jQuery.js" type="text/javascript"></script>
+        <script src="js/script.js" type="text/javascript"></script>
+    </head>
+    <body class="hide">
+        <div class="field_1">
+            <div class="jumbotron" style="background-color: #05264c; color: #fff;">
+                <h2>User: Welcome To Fast Credit User Management Application</h2>
+            </div>
+
+            <div class="x_div">
+                <div>
+                    <div class="_des">
+                        <button id="proceed" class="login btn btn-success">Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            window.onload = function () {
+                var token = localStorage.getItem("token");
+
+                if (token === null || token.trim() === "") {
+                    window.location.href = "/user-interface/index.html";
+                    alert("Unauthorized");
+                } else {
+                    var getRole = "http://localhost:9797/fast-credit/api/v1/role";
+                    var headerData = {
+                        'Authorization': 'Bearer ' + token,
+                        'ChannelCode': "WEB_01"
+                    };
+
+                    $.ajax({
+                        type: 'GET',
+                        url: getRole,
+                        contentType: 'application/json',
+                        headers: headerData,
+                        processData: false,
+                        timeout: 600000,
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data) {
+                                if (data.data === "user") {
+                                    $("body").removeClass("hide").addClass("show");
+                                } else {
+                                    alert("Unauthorized");
+                                    window.location.href = "/user-interface/admin.html";
+                                }
+                            } else {
+                                window.location.href = "/user-interface/index.html";
+                                alert("Unauthorized");
+                            }
+                        },
+                        error: function () {
+                            window.location.href = "/user-interface/index.html";
+                            alert("Unauthorized");
+                        }
+                    });
+                }
+            };
+        </script>
+    </body>
+</html>

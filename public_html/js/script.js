@@ -10,6 +10,10 @@ $(document).ready(function () {
     var currentPage;
     var previousPage;
 
+    $(this).contextmenu(function () {
+        return false;
+    });
+
     $(window).click(function (event) {
         if ($(event.target).is($("#loginModal")) && $("#loginModal").is(":visible")) {
             resetLoginForm();
@@ -24,15 +28,15 @@ $(document).ready(function () {
             $("#view_all").removeClass("show").addClass("hide");
 //            resetNewCustomerForm();
         }
-        
+
         if ($(event.target).is($("#view_one")) && $("#view_one").is(":visible")) {
             $("#view_one").removeClass("show").addClass("hide");
             resetrow2();
         }
     });
-    
-    function resetrow2(){
-        
+
+    function resetrow2() {
+
     }
 
     function validateInput(val) {
@@ -129,7 +133,7 @@ $(document).ready(function () {
                                 if (response.role === "ADMIN") {
                                     window.location.href = "/user-interface/admin.html";
                                 } else {
-                                    window.location.href = "#";
+                                    window.location.href = "/user-interface/user.html";
                                 }
                             } else {
                                 $("#info").text(response).addClass("error");
@@ -441,7 +445,7 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + localStorage.getItem("token"),
                 'ChannelCode': channelCode
             };
-            var fetchUsers = "http://localhost:9797/fast-credit/admin/v1/user/"+input;
+            var fetchUsers = "http://localhost:9797/fast-credit/admin/v1/user/" + input;
 
             $.ajax({
                 type: 'GET',
