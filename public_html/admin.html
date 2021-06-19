@@ -115,63 +115,84 @@
             </div>
 
             <!--View one user modal-->
-            <!--        <div id="view_all" class="modal hide">
-                        <div class="modal-content">
-                            <div class="modal-body">
-            
-                                <div id="loader_dx2" class="loader1"></div>
-                                <div id="info2" class="hide" style="text-align: center;"></div>
-            
-                                <div id="konTENT_2">
-            
+            <div id="view_one" class="modal hide">
+                <div class="modal-content-all">
+                    <div class="modal-body">
+                        <div id="konTENT_2">
+                            <div>
+                                <h2>User Management Record</h2></br>
+                                
+                                <div id="table_data2" class="hide">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Firstname</th>
+                                                <th>Lastname</th>
+                                                <th>Username</th>
+                                                <th>Telephone</th>
+                                                <th>DOB</th>
+                                                <th>Country</th>
+                                                <th>Gender</th>
+                                                <th>Created</th>
+                                                <th>Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table_body2" style="text-align: left;">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div>
+                                    <div id="loader_dx3" class="loader2_um hide"></div>
+                                    <div id="info3" class="hide" style="text-align: center;"></div>
                                 </div>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
+                </div>
+            </div>
 
             <!--Add all user modal-->
             <div id="view_all" class="modal hide">
-                <div class="modal-content">
+                <div class="modal-content-all">
                     <div class="modal-body">
-
-<!--                        <div id="loader_dx3" class="loader1"></div>
-                        <div id="info3" class="hide" style="text-align: center;"></div>-->
-
                         <div id="konTENT_3">
-                            <div >
-                                <h2>User Management Record</h2>       
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Firstname</th>
-                                            <th>Lastname</th>
-                                            <th>Username</th>
-                                            <th>Telephone</th>
-                                            <th>DOB</th>
-                                            <th>Country</th>
-                                            <th>Gender</th>
-                                            <th>Created</th>
-                                            <th>ID</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>John</td>
-                                            <td>Doe</td>
-                                            <td>john@example.com</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Mary</td>
-                                            <td>Moe</td>
-                                            <td>mary@example.com</td>
-                                        </tr>
-                                        <tr>
-                                            <td>July</td>
-                                            <td>Dooley</td>
-                                            <td>july@example.com</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div>
+                                <h2>User Management Record</h2></br>
+
+                                <div id="table_data" class="hide">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Firstname</th>
+                                                <th>Lastname</th>
+                                                <th>Username</th>
+                                                <th>Telephone</th>
+                                                <th>DOB</th>
+                                                <th>Country</th>
+                                                <th>Gender</th>
+                                                <th>Created</th>
+                                                <th>Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table_body" style="text-align: left;">
+
+                                        </tbody>
+                                    </table>
+
+                                    <div>
+                                        <ul class="pager">
+                                            <li><a id="prev" class="pointer">Prev</a></li>
+                                            <li><a id="next" class="pointer">Next</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div id="loader_dx2" class="loader2_um hide"></div>
+                                    <div id="info2" class="hide" style="text-align: center;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

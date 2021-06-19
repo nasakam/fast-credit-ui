@@ -5,6 +5,10 @@
 $(document).ready(function () {
     var channelCode = "WEB_01";
     var EMPTY_STRING = "";
+    var size = 3;
+    var nextPage;
+    var currentPage;
+    var previousPage;
 
     $(window).click(function (event) {
         if ($(event.target).is($("#loginModal")) && $("#loginModal").is(":visible")) {
@@ -20,7 +24,16 @@ $(document).ready(function () {
             $("#view_all").removeClass("show").addClass("hide");
 //            resetNewCustomerForm();
         }
+        
+        if ($(event.target).is($("#view_one")) && $("#view_one").is(":visible")) {
+            $("#view_one").removeClass("show").addClass("hide");
+            resetrow2();
+        }
     });
+    
+    function resetrow2(){
+        
+    }
 
     function validateInput(val) {
         var retVal = false;
@@ -105,9 +118,10 @@ $(document).ready(function () {
                     timeout: 600000,
                     success: function (data) {
                         var response = data.data;
+                        $("#loader_dx").removeClass("show").addClass("hide");
+
                         if (data) {
                             if (data.code === "00") {
-                                $("#loader_dx").removeClass("show").addClass("hide");
                                 $("#loginModal").removeClass("show").addClass("hide");
                                 localStorage.setItem('token', data.data.access_token);
                                 resetLoginForm();
@@ -120,12 +134,10 @@ $(document).ready(function () {
                             } else {
                                 $("#info").text(response).addClass("error");
                                 $("#info").removeClass("hide").addClass("show");
-                                $("#loader_dx").removeClass("show").addClass("hide");
                             }
                         } else {
                             $("#info").text("Error logging in").addClass("error");
                             $("#info").removeClass("hide").addClass("show");
-                            $("#loader_dx").removeClass("show").addClass("hide");
                         }
                     },
                     error: function () {
@@ -203,22 +215,20 @@ $(document).ready(function () {
                 timeout: 600000,
                 success: function (data) {
                     var response = data.data;
+                    $("#loader_dx1").removeClass("show").addClass("hide");
 
                     if (data) {
                         if (data.code === "00") {
-                            $("#loader_dx").removeClass("show").addClass("hide");
                             $("#loginModal").removeClass("show").addClass("hide");
 
                             resetNewCustomerForm2();
                         } else {
                             $("#info1").text(response).removeClass("success").addClass("error");
                             $("#info1").removeClass("hide").addClass("show");
-                            $("#loader_dx1").removeClass("show").addClass("hide");
                         }
                     } else {
                         $("#info1").text("Error saving new user").removeClass("success").addClass("error");
                         $("#info1").removeClass("hide").addClass("show");
-                        $("#loader_dx1").removeClass("show").addClass("hide");
                     }
                 },
                 error: function () {
@@ -233,14 +243,177 @@ $(document).ready(function () {
     });
 
     $("#viewall").click(function () {
+        currentPage = 0;
+
         $("#view_all").removeClass("hide").addClass("show");
+        $("#loader_dx2").removeClass("hide").addClass("show");
+        $("#info2").text("").removeClass("error");
+        $("#info2").removeClass("show").addClass("hide");
+
+        $("#prev").removeClass("show2").addClass("hide");
+
+//        if (init === 1) {
+//            $("#prev").removeClass("show2").addClass("hide");
+//        } else {
+//            $("#prev").removeClass("hide").addClass("show2");
+//        }
+
+        var headerData = {
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'ChannelCode': channelCode
+        };
+        var fetchUsers = "http://localhost:9797/fast-credit/admin/v1/users";
+        var pagingDTO = {
+            "init": currentPage,
+            "size": size
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: fetchUsers,
+            contentType: 'application/json',
+            headers: headerData,
+            data: JSON.stringify(pagingDTO),
+            processData: false,
+            timeout: 600000,
+            success: function (data) {
+                var response = data.data;
+                $("#loader_dx2").removeClass("show").addClass("hide");
+
+                if (data) {
+                    if (data.code === "00") {
+                        nextPage = 1;
+                        previousPage = 0;
+
+                        $("#table_data").removeClass("hide").addClass("show");
+                        var rows = "";
+
+                        $.each(response, function (key, user) {
+                            rows += "<tr class='pointer'>\n\
+                                <td>" + user.firstname + "</td>\n\
+                                <td>" + user.lastname + "</td>\n\
+                                <td>" + user.email + "</td>\n\
+                                <td>" + user.phonenumber + "</td>\n\
+                                <td>" + user.dateOfBirth + "</td>\n\
+                                <td>" + user.nationality + "</td>\n\
+                                <td>" + user.gender + "</td>\n\
+                                <td>" + user.createdOn + "</td>\n\
+                                <td>" + user.role + "</td>\n\
+                                </tr>";
+                        });
+
+                        $("#table_body").html(rows);
+                    } else {
+                        $("#info2").text(response).removeClass("success").addClass("error");
+                        $("#info2").removeClass("hide").addClass("show");
+                    }
+                } else {
+                    $("#info2").text("Error fetching users").removeClass("success").addClass("error");
+                    $("#info2").removeClass("hide").addClass("show");
+                }
+            },
+            error: function () {
+                $("#info2").text("Error fetching users").removeClass("success").addClass("error");
+                $("#info2").removeClass("hide").addClass("show");
+                $("#loader_dx2").removeClass("show").addClass("hide");
+            }
+        });
     });
 
+    $("#next").click(function () {
+        prev_next("next");
+    });
 
+    $("#prev").click(function () {
+        prev_next("prev");
+    });
 
+    function prev_next(which) {
+        $("#view_all").removeClass("show").addClass("hide");
 
+//        if (which === "next") {
+//            currentPage = nextPage;
+//            previousPage = currentPage === 0 ? currentPage : currentPage - 1;
+//            nextPage = nextPage + 1;
+//        } else {
+//            currentPage = nextPage - 1;
+//            previousPage = currentPage === 0 ? currentPage : currentPage + 1;
+//            nextPage = currentPage - 1;
+//        }
 
+        $("#view_all").removeClass("hide").addClass("show");
+        $("#loader_dx2").removeClass("hide").addClass("show");
+        $("#info2").text("").removeClass("error");
+        $("#info2").removeClass("show").addClass("hide");
 
+        var headerData = {
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'ChannelCode': channelCode
+        };
+        var fetchUsers = "http://localhost:9797/fast-credit/admin/v1/users";
+
+        var pagingDTO = {
+            "init": nextPage,
+            "size": size
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: fetchUsers,
+            contentType: 'application/json',
+            headers: headerData,
+            data: JSON.stringify(pagingDTO),
+            processData: false,
+            timeout: 600000,
+            success: function (data) {
+                var response = data.data;
+                $("#loader_dx2").removeClass("show").addClass("hide");
+
+                if (data) {
+                    if (data.code === "00") {
+                        if (currentPage > 0) {
+                            $("#prev").removeClass("hide").addClass("show2");
+                        } else {
+                            $("#prev").removeClass("show2").addClass("hide");
+                        }
+
+                        $("#next").removeClass("hide").addClass("show2");
+                        $("#table_data").removeClass("hide").addClass("show");
+                        var rows = "";
+
+                        $.each(response, function (key, user) {
+                            rows += "<tr id='" + user.id + "' class='pointer'>\n\
+                                <td>" + user.firstname + "</td>\n\
+                                <td>" + user.lastname + "</td>\n\
+                                <td>" + user.email + "</td>\n\
+                                <td>" + user.phonenumber + "</td>\n\
+                                <td>" + user.dateOfBirth + "</td>\n\
+                                <td>" + user.nationality + "</td>\n\
+                                <td>" + user.gender + "</td>\n\
+                                <td>" + user.createdOn + "</td>\n\
+                                <td>" + user.role + "</td>\n\
+                                </tr>";
+                        });
+
+                        $("#table_body").html(rows);
+                    } else {
+                        $("#next").removeClass("show2").addClass("hide");
+                        $("#info2").text(response).removeClass("success").addClass("error");
+                        $("#info2").removeClass("hide").addClass("show");
+                    }
+                } else {
+                    $("#next").removeClass("show2").addClass("hide");
+                    $("#info2").text("Error fetching users").removeClass("success").addClass("error");
+                    $("#info2").removeClass("hide").addClass("show");
+                }
+            },
+            error: function () {
+                $("#info2").text("Error fetching users").removeClass("success").addClass("error");
+                $("#info2").removeClass("hide").addClass("show");
+                $("#loader_dx2").removeClass("show").addClass("hide");
+            }
+        });
+    }
 
 
 //    Search one user by pressing enter key
@@ -259,12 +432,65 @@ $(document).ready(function () {
         var input = $('#input_field').val();
 
         if (validateInput(input)) {
+            $("#view_one").removeClass("hide").addClass("show");
+            $("#loader_dx3").removeClass("hide").addClass("show");
+            $("#info3").text("").removeClass("error");
+            $("#info3").removeClass("show").addClass("hide");
 
+            var headerData = {
+                'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                'ChannelCode': channelCode
+            };
+            var fetchUsers = "http://localhost:9797/fast-credit/admin/v1/user/"+input;
+
+            $.ajax({
+                type: 'GET',
+                url: fetchUsers,
+                contentType: 'application/json',
+                headers: headerData,
+                processData: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log(data);
+                    var response = data.data;
+                    $("#loader_dx3").removeClass("show").addClass("hide");
+
+                    if (data) {
+                        if (data.code === "00") {
+                            $("#table_data2").removeClass("hide").addClass("show");
+                            var rows = "<tr class='pointer'>\n\
+                                <td>" + response.firstname + "</td>\n\
+                                <td>" + response.lastname + "</td>\n\
+                                <td>" + response.email + "</td>\n\
+                                <td>" + response.phonenumber + "</td>\n\
+                                <td>" + response.dateOfBirth + "</td>\n\
+                                <td>" + response.nationality + "</td>\n\
+                                <td>" + response.gender + "</td>\n\
+                                <td>" + response.createdOn + "</td>\n\
+                                <td>" + response.role + "</td>\n\
+                                </tr>";
+
+                            $("#table_body2").html(rows);
+                        } else {
+                            $("#table_data2").removeClass("show").addClass("hide");
+                            $("#info3").text(response).removeClass("success").addClass("error");
+                            $("#info3").removeClass("hide").addClass("show");
+                        }
+                    } else {
+                        $("#table_data2").removeClass("show").addClass("hide");
+                        $("#info3").text("Error fetching single users").removeClass("success").addClass("error");
+                        $("#info3").removeClass("hide").addClass("show");
+                    }
+                },
+                error: function () {
+                    $("#table_data2").removeClass("show").addClass("hide");
+                    $("#info3").text("Error fetching single users").removeClass("success").addClass("error");
+                    $("#info3").removeClass("hide").addClass("show");
+                    $("#loader_dx3").removeClass("show").addClass("hide");
+                }
+            });
         } else {
-//            $('#data_table_DIV').removeClass("show").addClass("hide");
-//            $('#bookmark').removeClass("show").addClass("hide");
-//            $('#display_results').addClass("info_x").html("Please enter username...");
-//            $('#display_results').removeClass("spinnerA").addClass("ext");
+            alert("Enter firstname or lastname or username");
         }
     }
 
