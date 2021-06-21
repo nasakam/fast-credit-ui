@@ -23,7 +23,7 @@
                 <div class="row" style="width: 60%; margin: 0 auto; margin-top: 60px;">
                     <div class="input-group">
                         <input id="input_field" type="text" class="input_1 form-control input-lg" 
-                               placeholder="Search user by firstname, lastname or username">
+                               placeholder="Search user by username">
                         <div class="input-group-btn">
                             <button id="search_button" class="btn btn-default btn-lg" type="submit">
                                 <em class="glyphicon glyphicon-search"></em>
@@ -142,10 +142,11 @@
                                         </tbody>
                                     </table>
 
-                                    <span class="">
+                                    <span>
                                         <button id="update1" class="btn btn-primary inline" style="width: 45%;">Update</button>
                                     </span>
-                                    <span class="x_p">
+                                    <span>
+                                        <span class="hide" id="username_"></span>
                                         <button id="delete1" class="btn btn-danger inline" style="width: 45%;">Delete</button>
                                     </span>
                                 </div>
@@ -188,12 +189,12 @@
                                         </tbody>
                                     </table>
 
-                                    <div>
+<!--                                    <div>
                                         <ul class="pager">
                                             <li><a id="prev" class="pointer">Prev</a></li>
                                             <li><a id="next" class="pointer">Next</a></li>
                                         </ul>
-                                    </div>
+                                    </div>-->
                                 </div>
 
                                 <div>

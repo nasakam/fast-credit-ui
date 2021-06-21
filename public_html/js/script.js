@@ -473,7 +473,7 @@ $(document).ready(function () {
                                 <td>" + response.createdOn + "</td>\n\
                                 <td>" + response.role + "</td>\n\
                                 </tr>";
-
+                            $("#username_").text(response.email);
                             $("#table_body2").html(rows);
                         } else {
                             $("#table_data2").removeClass("show").addClass("hide");
@@ -494,9 +494,62 @@ $(document).ready(function () {
                 }
             });
         } else {
-            alert("Enter firstname or lastname or username");
+            alert("You must enter a username");
         }
     }
+
+    $("#delete1").click(function () {
+        var username = $("#username_").text();
+
+        var headerData = {
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'ChannelCode': channelCode
+        };
+
+        if (username.trim() !== "") {
+            var deleteUser = "http://localhost:9797/fast-credit/admin/v1/del/" + username;
+
+            $.ajax({
+                type: 'GET',
+                url: deleteUser,
+                contentType: 'application/json',
+                headers: headerData,
+                processData: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log(data);
+                    var response = data.data;
+                    $("#loader_dx3").removeClass("show").addClass("hide");
+
+                    if (data) {
+                        if (data.code === "00") {
+                            $("#table_data2").removeClass("show").addClass("hide");
+                            $("#info3").text("User deleted successfully").removeClass("error").addClass("success");
+                            $("#info3").removeClass("hide").addClass("show");
+                        } else {
+                            if (response === "You cannot delete an admin") {
+                                alert("Only a super admin may delete an admin");
+                            } else {
+                                $("#table_data2").removeClass("show").addClass("hide");
+                                $("#info3").text(response).removeClass("success").addClass("error");
+                                $("#info3").removeClass("hide").addClass("show");
+                            }
+                        }
+                    } else {
+                        $("#table_data2").removeClass("show").addClass("hide");
+                        $("#info3").text("Error deleting user").removeClass("success").addClass("error");
+                        $("#info3").removeClass("hide").addClass("show");
+                    }
+                },
+                error: function () {
+                    $("#table_data2").removeClass("show").addClass("hide");
+                    $("#info3").text("Error deleting user").removeClass("success").addClass("error");
+                    $("#info3").removeClass("hide").addClass("show");
+                    $("#loader_dx3").removeClass("show").addClass("hide");
+                }
+            });
+        }
+    });
 
 //    function selectedGender(){
 //        $('[name="gender"]').each(function(index){
